@@ -200,11 +200,11 @@ void UKF::Prediction(double delta_t) {
   P_aug.fill(0.0);
   P_aug.topLeftCorner(n_x_,n_x_) = P_;
   P_aug.bottomRightCorner(2,2) = Q;
-  
+  cout << "predict fn c01.1"  << endl;
     //create square root matrix
   MatrixXd A = P_aug.llt().matrixL();
   
-  cout << "predict fn c02"  << endl;
+  cout << "predict fn c02" << A << endl;
   
   //create augmented sigma points
   lambda_ = 3-n_x_;
