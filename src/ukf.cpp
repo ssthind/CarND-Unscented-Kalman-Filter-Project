@@ -192,7 +192,9 @@ void UKF::Prediction(double delta_t) {
     //create augmented mean state
   VectorXd x_aug = VectorXd(n_aug_);
   x_aug << x_, 0, 0;
-
+  
+  cout << "predict fn c01"  << endl;
+  
   //create augmented covariance matrix
   MatrixXd P_aug = MatrixXd(n_aug_,n_aug_);
   P_aug.fill(0.0);
@@ -201,6 +203,8 @@ void UKF::Prediction(double delta_t) {
   
     //create square root matrix
   MatrixXd A = P_aug.llt().matrixL();
+  
+  cout << "predict fn c02"  << endl;
   
   //create augmented sigma points
   lambda_ = 3-n_x_;
@@ -213,7 +217,7 @@ void UKF::Prediction(double delta_t) {
       
   }
   
-  
+  cout << "predict fn c03"  << endl;
   // apply prediction function on sigma points 
   for (unsigned int i = 0; i< 2*n_aug_+1; i++)
   {
@@ -260,7 +264,7 @@ void UKF::Prediction(double delta_t) {
   }
   
   ///////////////predict covariance function
-  
+  cout << "predict fn c04"  << endl;
   //predicted state mean
   VectorXd x_mean = VectorXd(n_aug_);
   x_mean.fill(0.0);
@@ -268,6 +272,8 @@ void UKF::Prediction(double delta_t) {
     x_mean = x_mean + weights(i) * Xsig_pred_.col(i);
   }
 
+  
+  cout << "predict fn c05"  << endl;
   //predicted state covariance matrix
   MatrixXd P = MatrixXd(n_x_,n_x_);
   P.fill(0.0);
@@ -284,10 +290,11 @@ void UKF::Prediction(double delta_t) {
 
     P = P + weights(i) * x_diff * x_diff.transpose() ;
   }
-  
+  cout << "predict fn c06"  << endl;
   x_ = x_mean;
   P_ = P;
   //return from prediction step
+  cout << "predict fn c07"  << endl;
    return;
   
 }
