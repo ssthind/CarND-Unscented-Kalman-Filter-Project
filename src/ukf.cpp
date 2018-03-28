@@ -57,8 +57,8 @@ UKF::UKF() {
   
   ///Process noise matrix for prediction
   Q = MatrixXd(2,2);
-  Q << std_a * std_a, 0,
-        0, std_yawdd * std_yawdd;
+  Q << std_a_ * std_a_, 0,
+        0, std_yawdd_ * std_yawdd_;
   
   ///Measurement noise matrix for laser
   R_laser = MatrixXd(n_z_laser,n_z_laser);
@@ -158,10 +158,10 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
   double delta_t = (meas_package.timestamp_ - previous_timestamp_)/1000000.0;	//delta_t - expressed in seconds
 	previous_timestamp_ = meas_package.timestamp_;
   //////Calling UKF predict function for each iteration.
-  Predict(delta_t);
+  Prediction(delta_t);
   
   /////Calling measurement
-  if (meas_package.sensor_type_ == MeasurementPackage::RADAR and use_radar_ = true) {
+  if (meas_package.sensor_type_ == MeasurementPackage::RADAR and use_radar_ == true) {
     UpdateRadar(meas_package);
     
   }
@@ -193,7 +193,7 @@ void UKF::Prediction(double delta_t) {
   //create augmented covariance matrix
   MatrixXd P_aug = MatrixXd(n_aug_,n_aug_);
   P_aug.fill(0.0);
-  P_aug.topLeftCorner(n_x,n_x) = P_;
+  P_aug.topLeftCorner(n_x_,n_x_) = P_;
   P_aug.bottomRightCorner(2,2) = Q;
   
     //create square root matrix
@@ -266,7 +266,7 @@ void UKF::Prediction(double delta_t) {
   }
 
   //predicted state covariance matrix
-  MatrixXd P = MatrixXd(n_x_,n_x_)
+  MatrixXd P = MatrixXd(n_x_,n_x_);
   P.fill(0.0);
   for (unsigned int i = 0; i < 2 * n_aug_ + 1; i++) {  //iterate over sigma points
 
@@ -307,8 +307,8 @@ void UKF::UpdateLidar(MeasurementPackage meas_package) {
  
 //transform sigma points into measurement space would be direct mapping of x,y sigma points 
   Zsig = MatrixXd(n_z_, 2 * n_aug_ + 1);
-  Zsig.row(0) = Xsig_pred_(0); /// x measurement
-  Zsig.row(1) = Xsig_pred_(1); /// y measurement   
+  Zsig.row(0) = Xsig_pred_.row(0); /// x measurement
+  Zsig.row(1) = Xsig_pred_.row(1); /// y measurement   
     
   Update(meas_package);
 
@@ -397,7 +397,7 @@ void UKF::Update(MeasurementPackage meas_package) {
       2.0062; */
 
   //create matrix for cross correlation Tc
-  MatrixXd Tc = MatrixXd(n_x, n_z_);
+  MatrixXd Tc = MatrixXd(n_x_, n_z_);
   //calculate cross correlation matrix
   Tc.fill(0.0);
   for (unsigned int i = 0; i < 2 * n_aug_ + 1; i++) {  //2n+1 simga points
