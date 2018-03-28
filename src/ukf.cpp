@@ -98,7 +98,7 @@ UKF::UKF() {
 			0, 0, 1, 0,
 			0, 0, 0, 1; */
   
-  
+  cout << "initialize UKF "  << endl;
   /**
   Complete the initialization. See ukf.h for other member properties.
 
@@ -132,7 +132,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
       //x_ << rho*cos(phi), rho*sin(phi), 0, 0;
       // velocity = sqrt(5.199747^2 + 0.001796856^2);  //
       x_ << 0.8599968, 0.6000449, 5.19974731, 0.0003455661, 0.01382155;
-      //cout << "initial x_ in radar= " << x_ << endl;
+      cout << "initial x_ in radar= " << x_ << endl;
       is_initialized_ = true;
       return;	  
 	  
@@ -144,7 +144,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
 		
       //x_ << meas_package.raw_measurements_[0], meas_package.raw_measurements_[1], 0, 0;
       x_ << 0.6, 0.6, 5.199937, 0, 0.006911322;
-      //cout << "initial x_ in laser= " << x_ << endl;
+      cout << "initial x_ in laser= " << x_ << endl;
       is_initialized_ = true;
       return;
     }
@@ -158,16 +158,19 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
   double delta_t = (meas_package.timestamp_ - previous_timestamp_)/1000000.0;	//delta_t - expressed in seconds
 	previous_timestamp_ = meas_package.timestamp_;
   //////Calling UKF predict function for each iteration.
+  cout << "before predict "  << endl;
   Prediction(delta_t);
-  
+  cout << "after predict "  << endl;
   /////Calling measurement
   if (meas_package.sensor_type_ == MeasurementPackage::RADAR and use_radar_ == true) {
+    cout << "before update Radar "  << endl;
     UpdateRadar(meas_package);
-    
+    cout << "after update Radar "  << endl;
   }
   else if (meas_package.sensor_type_ == MeasurementPackage::LASER  and use_laser_==true) {  
+  cout << "before update laser "  << endl;
     UpdateLidar(meas_package);
-  
+  cout << "after update laser "  << endl;
   }
 
   return;
