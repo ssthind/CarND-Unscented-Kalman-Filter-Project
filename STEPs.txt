@@ -19,8 +19,3 @@ For connecting simulator to docker on windows 7 OS.
 **** On docker
 - and executing the file ./UnscentedKF
 
-
-docker cp "D:\Training\Power programmer\udacity_course\Self_driving car\term 02\P-07\UKF_sst\src" t2_proj:work/UKF1/
-netsh interface portproxy add v4tov4 listenport=4567 listenaddress=127.0.0.1 connectport=4567 connectaddress=198.168.99.100 protocol=tcp
-netsh interface portproxy reset
-netsh interface portproxy show all
