@@ -80,6 +80,9 @@ public:
   
   MatrixXd Zsig;
 
+  //////NIS
+  double NIS_calc;
+  float NIS_chk_lazer, NIS_chk_radar, counter_reading;
   /**
    * Constructor
    */
@@ -107,6 +110,9 @@ public:
    * Updates the state and the state covariance matrix using a laser measurement
    * @param meas_package The measurement at k+1
    */
+   
+  void Update(MeasurementPackage meas_package); 
+   
   void UpdateLidar(MeasurementPackage meas_package);
 
   /**
@@ -115,7 +121,7 @@ public:
    */
   void UpdateRadar(MeasurementPackage meas_package);
   
-  void Update(MeasurementPackage meas_package);
+
   
 /*   void GenerateSigmaPoints(MatrixXd* Xsig_out);
   void AugmentedSigmaPoints(MatrixXd* Xsig_out);
